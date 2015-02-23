@@ -144,7 +144,7 @@ getAllIssues().map(function(issue){
     row["User(s)"] = users.join(", ")
     row["Title"] = issue.title
     row["Scope"] = "issue"
-    row["Issue Url"] = issue.url
+    row["Issue Url"] = issue.html_url
     row["Comment Url"] = ""
     rows.push(row)
   })
