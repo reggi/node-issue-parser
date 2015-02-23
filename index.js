@@ -1,3 +1,4 @@
+var stats = require("stats-lite")
 var cheerio = require('cheerio')
 var google = require('googleapis')
 var googleDriveAuth = require("./google-drive-auth")
@@ -95,7 +96,6 @@ function upload(google, title, body){
       body: body,
     }
   }).spread(function(data, response){
-    console.log(data)
     return data
   })
 }
@@ -149,6 +149,8 @@ getAllIssues().map(function(issue){
 }).then(function(csvString){
   return googleDriveAuth().then(function(oauth2Client){
     google.options({ auth: oauth2Client });
-    return upload(google, "EmpireJS CFP", csvString)
+    return upload(google, "EmpireJS CFP", csvString).then(function(){
+      debug("done!")
+    })
   })
 })
