@@ -77,8 +77,9 @@ function commentParser(comment){
   })
   parsedComment["Total"] = total
   parsedComment["Note"] = $("p").eq(0).text()
-    .replace(/(note\:|notes\:|^\s+)/gi,"")
-    .replace(/(\r\n|\n|\r)/gm,"");
+    .replace(/(note\:|notes\:)/gi,"")
+    .replace(/(\r\n|\n|\r)/gm,"")
+    .replace(/^\s+/, "")
   return parsedComment;
 }
 
