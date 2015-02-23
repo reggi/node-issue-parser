@@ -1,4 +1,3 @@
-var stats = require("stats-lite")
 var cheerio = require('cheerio')
 var google = require('googleapis')
 var googleDriveAuth = require("./google-drive-auth")
@@ -76,7 +75,10 @@ function commentParser(comment){
     parsedComment[listCriteria] = number
     total += number
   })
-  parsedComment["total"] = total
+  parsedComment["Total"] = total
+  parsedComment["Note"] = $("p").eq(0).text()
+    .replace(/(note\:|notes\:|^\s+)/gi,"")
+    .replace(/(\r\n|\n|\r)/gm,"");
   return parsedComment;
 }
 
@@ -119,11 +121,11 @@ getAllIssues().map(function(issue){
     if(!issue) debug("typeof issue %s", typeof issue)
     _.each(issue.comments, function(comment){
       var row = comment.parsed
-      row.user = comment.user.login
-      row.title = issue.title
-      row.scope = "comment"
-      row["Comment Url"] = comment.html_url
+      row["User(s)"] = comment.user.login
+      row["Title"] = issue.title
+      row["Scope"] = "comment"
       row["Issue Url"] = issue.html_url
+      row["Comment Url"] = comment.html_url
       rows.push(row)
     })
   })
@@ -138,11 +140,12 @@ getAllIssues().map(function(issue){
         row[key] += value
       })
     })
-    row.user = users.join(", ")
-    row.title = issue.title
-    row["Comment Url"] = ""
+    row["Note"] = ""
+    row["User(s)"] = users.join(", ")
+    row["Title"] = issue.title
+    row["Scope"] = "issue"
     row["Issue Url"] = issue.url
-    row.scope = "issue"
+    row["Comment Url"] = ""
     rows.push(row)
   })
   return csv.stringifyAsync(rows, {"header": true})
