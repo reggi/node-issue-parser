@@ -21,7 +21,6 @@ github.authenticate({
 
 csv = Promise.promisifyAll(csv)
 github.issues = Promise.promisifyAll(github.issues)
-jsdom = Promise.promisifyAll(jsdom)
 
 function getComments(issueNumber){
   debug("fetching github comments for issue %s", issueNumber)
@@ -83,8 +82,9 @@ function commentParser(comment){
 function upload(google, title, body){
   var drive = google.drive("v2")
   drive.files = Promise.promisifyAll(drive.files)
-  return drive.files.insertAsync({
+  return drive.files.updateAsync({
     convert: true,
+    fileId: "1EjnybvoHf4ioN8-utkiWMWeI8W9bTS9Rf-JR_qAGajg",
     resource: {
       title: title,
       mimeType: 'text/csv',
@@ -95,6 +95,7 @@ function upload(google, title, body){
       body: body,
     }
   }).spread(function(data, response){
+    console.log(data)
     return data
   })
 }
@@ -121,8 +122,8 @@ getAllIssues().map(function(issue){
       row.user = comment.user.login
       row.title = issue.title
       row.scope = "comment"
-      row["Comment Url"] = comment.url
-      row["Issue Url"] = issue.url
+      row["Comment Url"] = comment.html_url
+      row["Issue Url"] = issue.html_url
       rows.push(row)
     })
   })
