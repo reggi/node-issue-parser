@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "google-auth": "node google-server.js"
+    "google-auth": "node google-server.js",
+    "start": "sh ./run.sh"
   },
   "author": "",
   "license": "ISC",

@@ -122,6 +122,7 @@ getAllIssues().map(function(issue){
     if(!issue) debug("typeof issue %s", typeof issue)
     _.each(issue.comments, function(comment){
       var row = comment.parsed
+      row["Total Average"] = ""
       row["User(s)"] = comment.user.login
       row["Title"] = issue.title
       row["Scope"] = "comment"
@@ -141,6 +142,7 @@ getAllIssues().map(function(issue){
         row[key] += value
       })
     })
+    row["Total Average"] = row["Total"] / users.length
     row["Note"] = ""
     row["User(s)"] = users.join(", ")
     row["Title"] = issue.title
